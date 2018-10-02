@@ -118,32 +118,18 @@ csv_writer = csv.writer(outfile)
 #pprint.pprint(output_dict)
 header = output_dict[0].keys()
 #print(type(header))
-csv_writer.writerow(['SAPID','hostName', 'DeviceType', 'model','primaryIPAddress','DeviceAccepted','Source'])
+csv_writer.writerow(['hostName', 'DeviceType', 'model','primaryIPAddress','Source'])
 
 #outfile = output_dict.writerow(output_dict[0][0].keys())
 for row in output_dict:
 	hostName = row['hostName']
-	SAPID = hostName[-4:]
 	model = row['model'] #Device Model 
 	primaryIPAddress = row['primaryIPAddress'] #IP Address
 	lastAccessAttemptDate = row['lastAccessAttemptDate'] #LastAccessAttemptDate - keep if within last 7 days
 	lastAccessAttemptStatus = row['lastAccessAttemptStatus']
 	lastAccessSuccessDate = row['lastAccessSuccessDate']
-	Retail_check = hostName[1:4] 	#substring to determine and account for RF stores
 	Source = 'HPNA'
 			
-	if Retail_check == "R11":
-		DeviceType = 'S'
-	elif Retail_check == "R12":
-		DeviceType = 'S'
-	elif Retail_check == "R13":
-		DeviceType = 'R'
-	elif Retail_check == "W11":
-		DeviceType = 'U'
-	else:
-		DeviceType = hostName[2:3]
-	
-	
 	if lastAccessAttemptDate is None:
 		lastAccessAttemptDate2 = lastAccessAttemptDate
 	else: 
@@ -155,10 +141,9 @@ for row in output_dict:
 		lastAccessSuccessDate2 = parse(lastAccessSuccessDate, ignoretz=True)
 	
 	
-	DeviceAccepted = row['deviceCustom1']
 	today = datetime.datetime.now() #today's date
 	if lastAccessSuccessDate2 is not None and (lastAccessSuccessDate2).date() >= (today - datetime.timedelta(days=7)).date():
-		csv_writer.writerow([SAPID, hostName, DeviceType, primaryIPAddress, DeviceAccepted, Source]) #values row
+		csv_writer.writerow([hostName, DeviceType, model, primaryIPAddress, Source]) #values row
 	else:
 		continue
 	
