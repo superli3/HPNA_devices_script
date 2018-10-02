@@ -18,10 +18,8 @@ from zeep import Client, Settings, helpers
 from zeep.transports import Transport
 from zeep.wsse.username import UsernameToken
 
-
 #python -mzeep https://hpna_url_here/soap?wsdl --no-verify <- use this command to view WSDL file for HPNA. You will need to replace the HPNA url with your actual URL.
  
-
 #Disable InsecureRequestWarning: Unverified HTTPS request is being Made.
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -104,9 +102,6 @@ device = device_class ( sessionid = session_id.Text, group = 'Insert Group'
 	 )
 devices = service.list_device ( device
 	 )
-	 
-
-
 
 input_dict = helpers.serialize_object(devices.ResultSet.Row)
 output_dict = json.loads(json.dumps(input_dict))
@@ -114,10 +109,7 @@ print(type(output_dict))
 outfile = open ('hpna.csv', 'w', newline='')
 csv_writer = csv.writer(outfile)
 
-
-#pprint.pprint(output_dict)
 header = output_dict[0].keys()
-#print(type(header))
 csv_writer.writerow(['hostName', 'DeviceType', 'model','primaryIPAddress','Source'])
 
 #outfile = output_dict.writerow(output_dict[0][0].keys())
